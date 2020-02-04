@@ -164,14 +164,14 @@ class AikaData(object):
             v['maika.xg']            = a.__getattribute__('xg')
             v['maika.yinshen']       = a.__getattribute__('yinshen')
 
-           return v
+            return v
         except (ConnectionResetError) as err:
             _LOGGER.debug(
                 "Error getting AIKA info: %s", err)
             return None
 
     @property
-    def status(self):
+    async def status(self):
         """Get latest update if throttle allows. Return status."""
         await self.update()
         return self._status
@@ -188,6 +188,7 @@ class AikaData(object):
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     async def update(self, **kwargs):
+
         """Fetch the latest status from OnStar."""
         _LOGGER.info("Update onstar data.")
         self._status = await self._get_status()
