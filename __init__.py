@@ -48,7 +48,7 @@ async def async_setup(hass, base_config: dict):
     
     def _update(call) -> None:
         _LOGGER.info("Update service called")
-        asyncio.run_coroutine_threadsafe(hass.data[DOMAIN].update(), hass.loop)
+        hass.data[DOMAIN].update()
     
     hass.services.register(DOMAIN, SERVICE_UPDATE_STATE, _update)
 
