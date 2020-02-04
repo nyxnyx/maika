@@ -71,10 +71,9 @@ class AikaData(object):
         self._password = password
         self._server = server
         self.api = api.API(server)
-        self.a.registerUpdater(location.Location, device_status.DeviceStatus)
+        self.api.registerUpdater(location.Location, device_status.DeviceStatus)
         self.gps_position = None
         self._status = None
-        self.a = api.API(server)
         self.SENSOR_TYPES = {
             'maika.battery'      : ['Battery', '%', 'mdi:battery'],
             'maika.batteryStatus': ['Battery Status', '', None],
@@ -118,11 +117,11 @@ class AikaData(object):
 
     # Retrieves info from Aika
     async def _get_status(self):
-        if not hasattr(self.a, 'key2018'):
-            await self.a.doLogin(self._username, self._password)
+        if not hasattr(self.api, 'key2018'):
+            await self.api.doLogin(self._username, self._password)
 
         try:
-            await self.a.doUpdate()
+            await self.api.doUpdate()
 
             v={}
             v['maika.battery']       = a.__getattribute__('battery')
