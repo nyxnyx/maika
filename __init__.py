@@ -10,8 +10,8 @@ from homeassistant.util import Throttle
 
 
 from homeassistant.const import (
-    CONF_NAME, CONF_USERNAME, CONF_PASSWORD, CONF_ADDRESS,
-    CONF_SCAN_INTERVAL, CONF_RESOURCES, CONF_ALIAS, ATTR_STATE, STATE_UNKNOWN)
+    CONF_USERNAME, CONF_PASSWORD, CONF_ADDRESS,
+    )
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ CONFIG_SCHEMA = vol.Schema(
             {
             vol.Required(CONF_USERNAME): cv.string,
             vol.Required(CONF_PASSWORD): cv.string,
-            vol.Required(CONF_ADDRESS): cv.string,
+            vol.Required(CONF_ADDRESS): cv.url,
             }
         )
     },
@@ -33,7 +33,7 @@ CONFIG_SCHEMA = vol.Schema(
 SERVICE_UPDATE_STATE = "update_state"
 
 # Those components will be dicovered automatically based on ocnfiguration
-AIKA_COMPONENTS = ["sensor", "device_tracker"]
+MAIKA_COMPONENTS = ["sensor", "device_tracker"]
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=300)
 
@@ -52,7 +52,7 @@ async def async_setup(hass, base_config: dict):
     
     hass.services.register(DOMAIN, SERVICE_UPDATE_STATE, _update)
 
-    for component in AIKA_COMPONENTS:
+    for component in MAIKA_COMPONENTS:
         discovery.load_platform(hass, component, DOMAIN, {}, config)
 
     _LOGGER.info("Done initialization")
@@ -65,7 +65,7 @@ class AikaData(object):
     updates from the server.
     """
 
-    async def __init__(self, username, password, server):
+    def __init__(self, username, password, server):
         """Initialize the data object."""
         self._username = username
         self._password = password
