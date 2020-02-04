@@ -15,7 +15,7 @@ from homeassistant.const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-DOMAIN="aika"
+DOMAIN="maika"
 
 CONFIG_SCHEMA = vol.Schema(
     {
