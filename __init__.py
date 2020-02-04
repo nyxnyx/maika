@@ -71,7 +71,8 @@ class AikaData(object):
         self._password = password
         self._server = server
         self.api = api.API(server)
-        self.api.registerUpdater(location.Location, device_status.DeviceStatus)
+        self.api.registerUpdater(location.Location)
+        self.api.registerUpdater(device_status.DeviceStatus)
         self.gps_position = None
         self._status = None
         self.SENSOR_TYPES = {
