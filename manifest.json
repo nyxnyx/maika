@@ -1,0 +1,10 @@
+{
+    "domain": "openapiv3_component",
+    "name": "Integrates some GPS OBD2 trackers compatible with AIKA mobile app",
+    "documentation": "",
+    "requirements": [
+      "openapiv3==0.0.4"
+    ],
+    "dependencies": [],
+    "codeowners": ["nyxnyx"]
+  }
