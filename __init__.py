@@ -76,44 +76,44 @@ class AikaData(object):
         self._status = None
         self.a = api.API(server)
         self.SENSOR_TYPES = {
-            'aika.battery'      : ['Battery', '%', 'mdi:battery'],
-            'aika.batteryStatus': ['Battery Status', '', None],
-            'aika.course'       : ['Course', '', None],
-            'aika.dataContext'  : ['Data Context', None, None],
-            'aika.deviceID'     : ['Device ID', None, None],
-            'aika.deviceName'   : ['Device Name', None, None],
-            'aika.ICCID'        : ['ICCID', None, None],
-            'aika.icon'         : ['Icon', None, None],
-            'aika.id'           : ['ID', None, None],
-            'aika.isGPS'        : ['Is GPS?', None, None],
-            'aika.isStop'       : ['Is Stop?', None, None],
-            #'aika.key2018'     : ['', None, None],
-            'aika.lat'          : ['Latitude', None, None],
-            'aika.lng'          : ['Longtitude', None, None],
-            'aika.model'        : ['Model', None, None],
-            #'aika.new201710'   : ['', None, None],
-            'aika.ofl'          : ['Ofl', None, None],
-            'aika.olat'         : ['Old latitude', None, None],
-            'aika.olng'         : ['Old longtitude', None, None],
-            'aika.positionTime' : ['Position time', None, None],
-            'aika.serialNumber' : ['Serial Number', None, None],
-            'aika.sendCommand'  : ['Send Command', None, None],
-            'aika.speed'        : ['Speed', None, None],
-            'aika.sn'           : ['SN', None, None],
-            'aika.state'        : ['State', None, None],
-            'aika.status'       : ['Status', None, None],
-            'aika.statusX20'    : ['Status X20', None, None],
-            'aika.stm'          : ['STM', None, None],
-            'aika.timeZone'     : ['Time Zone', None, None],
-            'aika.VIN'          : ['VIN', None, None],
-            'aika.voice'        : ['Has Voice?', None, None],
-            'aika.warn'         : ['Warning', None, None],
-            'aika.warnStr'      : ['Warning string', None, None],
-            'aika.warnTime'     : ['Warning time', None, None],
-            'aika.warnTxt'      : ['Warning text', None, None],
-            'aika.work'         : ['Work', None, None],
-            'aika.xg'           : ['Xg', None, None],
-            'aika.yinshen'      : ['yinshen', None, None],
+            'maika.battery'      : ['Battery', '%', 'mdi:battery'],
+            'maika.batteryStatus': ['Battery Status', '', None],
+            'maika.course'       : ['Course', '', None],
+            'maika.dataContext'  : ['Data Context', None, None],
+            'maika.deviceID'     : ['Device ID', None, None],
+            'maika.deviceName'   : ['Device Name', None, None],
+            'maika.ICCID'        : ['ICCID', None, None],
+            'maika.icon'         : ['Icon', None, None],
+            'maika.id'           : ['ID', None, None],
+            'maika.isGPS'        : ['Is GPS?', None, None],
+            'maika.isStop'       : ['Is Stop?', None, None],
+            #'maika.key2018'     : ['', None, None],
+            'maika.lat'          : ['Latitude', None, None],
+            'maika.lng'          : ['Longtitude', None, None],
+            'maika.model'        : ['Model', None, None],
+            #'maika.new201710'   : ['', None, None],
+            'maika.ofl'          : ['Ofl', None, None],
+            'maika.olat'         : ['Old latitude', None, None],
+            'maika.olng'         : ['Old longtitude', None, None],
+            'maika.positionTime' : ['Position time', None, None],
+            'maika.serialNumber' : ['Serial Number', None, None],
+            'maika.sendCommand'  : ['Send Command', None, None],
+            'maika.speed'        : ['Speed', None, None],
+            'maika.sn'           : ['SN', None, None],
+            'maika.state'        : ['State', None, None],
+            'maika.status'       : ['Status', None, None],
+            'maika.statusX20'    : ['Status X20', None, None],
+            'maika.stm'          : ['STM', None, None],
+            'maika.timeZone'     : ['Time Zone', None, None],
+            'maika.VIN'          : ['VIN', None, None],
+            'maika.voice'        : ['Has Voice?', None, None],
+            'maika.warn'         : ['Warning', None, None],
+            'maika.warnStr'      : ['Warning string', None, None],
+            'maika.warnTime'     : ['Warning time', None, None],
+            'maika.warnTxt'      : ['Warning text', None, None],
+            'maika.work'         : ['Work', None, None],
+            'maika.xg'           : ['Xg', None, None],
+            'maika.yinshen'      : ['yinshen', None, None],
         }
 
     # Retrieves info from Aika
@@ -125,44 +125,44 @@ class AikaData(object):
             await self.a.doUpdate()
 
             v={}
-            v['aika.battery']       = a.__getattribute__('battery')
-            v['aika.batteryStatus'] = a.__getattribute__('batteryStatus')
-            v['aika.course']        = a.__getattribute__('course')
-            v['aika.dataContext'    = a.__getattribute__('dataContext')
-            v['aika.deviceID'       = a.__getattribute__('deviceID')
-            v['aika.deviceName'     = a.__getattribute__('deviceName')
-            v['aika.ICCID'          = a.__getattribute__('ICCID')
-            v['aika.icon'           = a.__getattribute__('icon')
-            v['aika.id'             = a.__getattribute__('id')
-            v['aika.isGPS'          = a.__getattribute__('isGPS')
-            v['aika.isStop'         = a.__getattribute__('isStop')
-            v[#'aika.key2018        = a.__getattribute__('key2018')
-            v['aika.lat'            = a.__getattribute__('lat')
-            v['aika.lng'            = a.__getattribute__('lng')
-            v['aika.model'          = a.__getattribute__('model')
-            v[#'aika.new201710      = a.__getattribute__('new201710')
-            v['aika.ofl'            = a.__getattribute__('ofl')
-            v['aika.olat'           = a.__getattribute__('olat')
-            v['aika.olng'           = a.__getattribute__('olng')
-            v['aika.positionTime'   = a.__getattribute__('positionTime')
-            v['aika.serialNumber'   = a.__getattribute__('serialNumber')
-            v['aika.sendCommand'    = a.__getattribute__('sendCommand')
-            v['aika.speed'          = a.__getattribute__('speed')
-            v['aika.sn'             = a.__getattribute__('sn')
-            v['aika.state'          = a.__getattribute__('state')
-            v['aika.status'         = a.__getattribute__('status')
-            v['aika.statusX20'      = a.__getattribute__('statusX20')
-            v['aika.stm'            = a.__getattribute__('stm')
-            v['aika.timeZone'       = a.__getattribute__('timeZone')
-            v['aika.VIN'            = a.__getattribute__('VIN')
-            v['aika.voice'          = a.__getattribute__('voice')
-            v['aika.warn'           = a.__getattribute__('warn')
-            v['aika.warnStr'        = a.__getattribute__('warnStr')
-            v['aika.warnTime'       = a.__getattribute__('warnTime')
-            v['aika.warnTxt'        = a.__getattribute__('warnTxt')
-            v['aika.work'           = a.__getattribute__('work')
-            v['aika.xg'             = a.__getattribute__('xg')
-            v['aika.yinshen'        = a.__getattribute__('yinshen')
+            v['maika.battery']       = a.__getattribute__('battery')
+            v['maika.batteryStatus'] = a.__getattribute__('batteryStatus')
+            v['maika.course']        = a.__getattribute__('course')
+            v['maika.dataContext']   = a.__getattribute__('dataContext')
+            v['maika.deviceID']      = a.__getattribute__('deviceID')
+            v['maika.deviceName']    = a.__getattribute__('deviceName')
+            v['maika.ICCID']         = a.__getattribute__('ICCID')
+            v['maika.icon']          = a.__getattribute__('icon')
+            v['maika.id']            = a.__getattribute__('id')
+            v['maika.isGPS']         = a.__getattribute__('isGPS')
+            v['maika.isStop']        = a.__getattribute__('isStop')
+            #v['maika.key2018']       = a.__getattribute__('key2018')
+            v['maika.lat']           = a.__getattribute__('lat')
+            v['maika.lng']           = a.__getattribute__('lng')
+            v['maika.model']         = a.__getattribute__('model')
+            #v['maika.new201710']      = a.__getattribute__('new201710')
+            v['maika.ofl']           = a.__getattribute__('ofl')
+            v['maika.olat']          = a.__getattribute__('olat')
+            v['maika.olng']          = a.__getattribute__('olng')
+            v['maika.positionTime']  = a.__getattribute__('positionTime')
+            v['maika.serialNumber']  = a.__getattribute__('serialNumber')
+            v['maika.sendCommand']   = a.__getattribute__('sendCommand')
+            v['maika.speed']         = a.__getattribute__('speed')
+            v['maika.sn']            = a.__getattribute__('sn')
+            v['maika.state']         = a.__getattribute__('state')
+            v['maika.status']        = a.__getattribute__('status')
+            v['maika.statusX20']     = a.__getattribute__('statusX20')
+            v['maika.stm']           = a.__getattribute__('stm')
+            v['maika.timeZone']      = a.__getattribute__('timeZone')
+            v['maika.VIN']           = a.__getattribute__('VIN')
+            v['maika.voice']         = a.__getattribute__('voice')
+            v['maika.warn']          = a.__getattribute__('warn')
+            v['maika.warnStr']       = a.__getattribute__('warnStr')
+            v['maika.warnTime']      = a.__getattribute__('warnTime')
+            v['maika.warnTxt']       = a.__getattribute__('warnTxt')
+            v['maika.work']          = a.__getattribute__('work')
+            v['maika.xg']            = a.__getattribute__('xg')
+            v['maika.yinshen']       = a.__getattribute__('yinshen')
 
            return v
         except (ConnectionResetError) as err:
