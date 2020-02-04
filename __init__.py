@@ -5,7 +5,7 @@ import asyncio
 from datetime import datetime
 from datetime import timedelta
 from homeassistant.helpers import discovery
-from openapi import api, location, device_status
+from obdtracker import api, location, device_status
 from homeassistant.util import Throttle
 
 
