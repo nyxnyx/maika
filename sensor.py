@@ -21,14 +21,14 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         _LOGGER.error("No data received from AIKA, unable to setup")
         raise PlatformNotReady
 
-    _LOGGER.info('AIKA sensors available: %s', data.status)
+    _LOGGER.info('AIKA sensors available: %s', data.status())
 
     entities = []
 
-    for resource in data.status:
+    for resource in data.SENSOR_TYPES:
         sensor_type = resource.lower()
 
-        if sensor_type in data.status:
+        if sensor_type in data.status():
             entities.append(AikaSensor(data, sensor_type, hass))
         else:
             _LOGGER.warning(
