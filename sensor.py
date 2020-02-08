@@ -13,10 +13,10 @@ from homeassistant.helpers.event import track_utc_time_change
 _LOGGER = logging.getLogger(__name__)
 
 
-def setup_platform(hass, config, add_entities, discovery_info=None):
+async def async_setup_platform(hass, config, add_entities, discovery_info=None):
 
     data = hass.data[DOMAIN]
-
+    await data.async_update()
     if data._status is None:
         _LOGGER.error("No data received from AIKA, unable to setup")
         raise PlatformNotReady
