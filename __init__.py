@@ -48,7 +48,7 @@ def setup(hass, base_config: dict):
     
     def _update(call) -> None:
         _LOGGER.info("Update service called")
-        await hass.data[DOMAIN].update()
+        await hass.data[DOMAIN].async_update()
     
     hass.services.register(DOMAIN, SERVICE_UPDATE_STATE, _update)
 
@@ -121,7 +121,7 @@ class AikaData(object):
         }
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
-    async def update(self, **kwargs):
+    async def async_update(self, **kwargs):
 
         """Fetch the latest status from AIKA."""
         _LOGGER.info("Update AIKA data.")
@@ -131,6 +131,7 @@ class AikaData(object):
     
     # Retrieves info from Aika
     async def _get_status(self):
+
         if not hasattr(self.api, 'key2018'):
             await self.api.doLogin(self._username, self._password)
         
