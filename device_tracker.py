@@ -10,7 +10,7 @@ from . import DOMAIN
 def setup_scanner(hass, config, see, discovery_info=None):
 
     data = hass.data[DOMAIN]
-    tracker = AIKAADeviceTracker(see, data)
+    tracker = AIKADeviceTracker(see, data)
     _LOGGER.info("AIKA device_tracker set-up")
     tracker.setup(hass)
     return True
@@ -36,17 +36,17 @@ class AIKADeviceTracker:
         Only update the state in home assistant if tracking in
         the car is enabled.
         """
-        dev_id = slugify(self._data.status['aika.model'])
+        dev_id = slugify(self._data.status['maika.model'])
 
         if self._data._pin is None:
             _LOGGER.debug("Tracking is disabled for vehicle %s", dev_id)
             return
 
         _LOGGER.info("Updating %s", dev_id)
-        attrs = {"id": self._data.status['aika.id']}
+        attrs = {"id": self._data.status['maika.id']}
         self._see(
             dev_id=dev_id,
-            host_name=self._data.status['aika.model'],
+            host_name=self._data.status['maika.model'],
             gps=self._data.gps_position,
             attributes=attrs,
             icon="mdi:car",

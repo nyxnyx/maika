@@ -17,18 +17,18 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
     data = hass.data[DOMAIN]
 
-    if data.status is None:
+    if data._status is None:
         _LOGGER.error("No data received from AIKA, unable to setup")
         raise PlatformNotReady
 
-    _LOGGER.info('AIKA sensors available: %s', data.status())
+    _LOGGER.info('AIKA sensors available: %s', data._status)
 
     entities = []
 
     for resource in data.SENSOR_TYPES:
         sensor_type = resource.lower()
 
-        if sensor_type in data.status():
+        if sensor_type in data._status:
             entities.append(AikaSensor(data, sensor_type, hass))
         else:
             _LOGGER.warning(
@@ -91,7 +91,7 @@ class AikaSensor(Entity):
 
     def display_state(self):
         """Return display state."""
-        if self._data.status is None:
+        if self._data._status is None:
             return 'OFF'
         else:
             return 'ON'
@@ -99,14 +99,14 @@ class AikaSensor(Entity):
     def update(self):
         """Get the latest status and use it to update our sensor state."""
         _LOGGER.info("Update state")
-        if self._data.status is None:
+        if self._data._status is None:
             self._state = None
             return
 
-        if self.type not in self._data.status:
+        if self.type not in self._data._status:
             self._state = None
         else:
-            self._state = self._data.status[self.type]
+            self._state = self._data._status[self.type]
 
     def force_update(self):
         return False

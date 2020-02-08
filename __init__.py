@@ -48,7 +48,7 @@ def setup(hass, base_config: dict):
     
     def _update(call) -> None:
         _LOGGER.info("Update service called")
-        hass.data[DOMAIN].update()
+        await hass.data[DOMAIN].update()
     
     hass.services.register(DOMAIN, SERVICE_UPDATE_STATE, _update)
 
@@ -171,9 +171,9 @@ class AikaData(object):
             return None
 
     @property
-    async def status(self):
+    def status(self):
         """Get latest update if throttle allows. Return status."""
-        await self.update()
+        self.update()
         return self._status
 
     # Formats date from 2019-10-16T10:54:52.535+02:00 to human readable
