@@ -37,7 +37,7 @@ MAIKA_COMPONENTS = ["sensor", "device_tracker"]
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=300)
 
-def setup(hass, base_config: dict):
+async def async_setup(hass, base_config: dict):
     
     config = base_config.get(DOMAIN)
     
@@ -46,12 +46,10 @@ def setup(hass, base_config: dict):
     server = config.get(CONF_ADDRESS)
     hass.data[DOMAIN] = AikaData(username, password, server)
     
-    def _update(call) -> None:
-        _LOGGER.info("Update service called")
-        hass.data[DOMAIN].update()
+    _LOGGER.info("Update service called")
+    await hass.data[DOMAIN].update()
     
-    hass.services.register(DOMAIN, SERVICE_UPDATE_STATE, _update)
-
+    
     for component in MAIKA_COMPONENTS:
         discovery.load_platform(hass, component, DOMAIN, {}, config)
 
@@ -116,13 +114,22 @@ class AikaData(object):
             'maika.yinshen'      : ['yinshen', None, None],
         }
 
+    @Throttle(MIN_TIME_BETWEEN_UPDATES)
+    async def update(self, **kwargs):
+
+        """Fetch the latest status from AIKA."""
+        _LOGGER.info("Update AIKA data.")
+        self._status = await self._get_status()
+        self.gps_position = self.get_location()
+
+    
     # Retrieves info from Aika
     async def _get_status(self):
         if not hasattr(self.api, 'key2018'):
             await self.api.doLogin(self._username, self._password)
-
+        
+        await self.api.doUpdate()
         try:
-            await self.api.doUpdate()
 
             v={}
             v['maika.battery']       = a.__getattribute__('battery')
@@ -171,9 +178,8 @@ class AikaData(object):
             return None
 
     @property
-    async def status(self):
+    def status(self):
         """Get latest update if throttle allows. Return status."""
-        await self.update()
         return self._status
 
     # Formats date from 2019-10-16T10:54:52.535+02:00 to human readable
@@ -184,11 +190,4 @@ class AikaData(object):
     # Gets latest location from table
     def get_location(self):
 
-        return {'longtitude': v['aika.lng', 'latitude': v['aika.lat']]}
-
-    @Throttle(MIN_TIME_BETWEEN_UPDATES)
-    async def update(self, **kwargs):
-
-        """Fetch the latest status from OnStar."""
-        _LOGGER.info("Update onstar data.")
-        self._status = await self._get_status()
+        return {'longtitude': v['maika.lng', 'latitude': v['maika.lat']]}

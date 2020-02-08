@@ -28,7 +28,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     for resource in data.SENSOR_TYPES:
         sensor_type = resource.lower()
 
-        if sensor_type in data.status():
+        if sensor_type in data._status:
             entities.append(AikaSensor(data, sensor_type, hass))
         else:
             _LOGGER.warning(
