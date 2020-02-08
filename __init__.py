@@ -100,6 +100,10 @@ class AikaData(object):
             'maika.sendCommand'  : ['Send Command', None, None],
             'maika.speed'        : ['Speed', None, None],
             'maika.sn'           : ['SN', None, None],
+            'maika.serialNumber' : ['Serial Number', None, None],
+            'maika.sendCommand'  : ['Send Command', None, None],
+            'maika.speed'        : ['Speed', None, None],
+            'maika.sn'           : ['SN', None, None],
             'maika.state'        : ['State', None, None],
             'maika.status'       : ['Status', None, None],
             'maika.statusX20'    : ['Status X20', None, None],
@@ -116,13 +120,22 @@ class AikaData(object):
             'maika.yinshen'      : ['yinshen', None, None],
         }
 
+    @Throttle(MIN_TIME_BETWEEN_UPDATES)
+    async def update(self, **kwargs):
+
+        """Fetch the latest status from AIKA."""
+        _LOGGER.info("Update AIKA data.")
+        self._status = await self._get_status()
+        self.gps_position = self.get_location()
+
+    
     # Retrieves info from Aika
     async def _get_status(self):
         if not hasattr(self.api, 'key2018'):
             await self.api.doLogin(self._username, self._password)
-
+        
+        await self.api.doUpdate()
         try:
-            await self.api.doUpdate()
 
             v={}
             v['maika.battery']       = a.__getattribute__('battery')
@@ -173,22 +186,5 @@ class AikaData(object):
     @property
     def status(self):
         """Get latest update if throttle allows. Return status."""
-        self.update()
         return self._status
 
-    # Formats date from 2019-10-16T10:54:52.535+02:00 to human readable
-    def _get_date(self, str_date):
-        date = datetime.strptime(str_date, '%Y-%m-%dT%H:%M:%S.%f%z')
-        return date.strftime('%Y-%m-%d %H:%M:%S')
-
-    # Gets latest location from table
-    def get_location(self):
-
-        return {'longtitude': v['aika.lng', 'latitude': v['aika.lat']]}
-
-    @Throttle(MIN_TIME_BETWEEN_UPDATES)
-    async def update(self, **kwargs):
-
-        """Fetch the latest status from OnStar."""
-        _LOGGER.info("Update onstar data.")
-        self._status = await self._get_status()
