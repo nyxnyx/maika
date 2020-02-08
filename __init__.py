@@ -46,7 +46,7 @@ def setup(hass, base_config: dict):
     server = config.get(CONF_ADDRESS)
     hass.data[DOMAIN] = AikaData(username, password, server)
     
-    def _update(call) -> None:
+    async def _update(call) -> None:
         _LOGGER.info("Update service called")
         await hass.data[DOMAIN].async_update()
     
