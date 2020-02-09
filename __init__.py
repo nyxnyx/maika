@@ -67,8 +67,8 @@ class AikaData(object):
         self._password = password
         self._server = server
         self.api = api.API(self._server)
-        self.api.registerUpdater(location.Location)
-        self.api.registerUpdater(device_status.DeviceStatus)
+        self.api.registerUpdater(location.Location(self.api))
+        self.api.registerUpdater(device_status.DeviceStatus(self.api))
         self.gps_position = None
         self._status = None
         self.SENSOR_TYPES = {
@@ -135,6 +135,7 @@ class AikaData(object):
         
         _LOGGER.info("AIKA - doUpdate")
         await self.api.doUpdate()
+        
         try:
 
             v={}
