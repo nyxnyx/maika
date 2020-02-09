@@ -131,7 +131,7 @@ class AikaData(object):
         if not hasattr(self.api, 'key2018'):
             _LOGGER.info("AIKA - logging in")
             await self.api.doLogin(self._username, self._password)
-            _LOGGER.info("AIKA - logged in")
+            _LOGGER.info("AIKA - logged in %s" % self.api.key)
         
         _LOGGER.info("AIKA - doUpdate")
         await self.api.doUpdate()
