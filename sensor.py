@@ -54,6 +54,12 @@ class AikaSensor(Entity):
 
         self.setup()
 
+    def setup(self):
+        """Schedule update of state by HA"""
+        track_utc_time_change(
+            self._hass, lambda now: self.schedule_update_ha_state(True), second=range(0, 60, 45)
+        )
+
     @property
     def name(self):
         return self._name
@@ -111,8 +117,4 @@ class AikaSensor(Entity):
     def force_update(self):
         return False
 
-    def setup(self):
-        """Schedule update of state by HA"""
-        track_utc_time_change(
-            self._hass, lambda now: self.schedule_update_ha_state(True), second=range(0, 60, 45)
-        )
+

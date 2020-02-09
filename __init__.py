@@ -45,13 +45,8 @@ async def async_setup(hass, base_config: dict):
     password = config.get(CONF_PASSWORD)
     server = config.get(CONF_ADDRESS)
     hass.data[DOMAIN] = AikaData(username, password, server)
+    _LOGGER.info("AIKA initialization...")
     
-    async def _update(call) -> None:
-        _LOGGER.info("Update service called")
-        await hass.data[DOMAIN].async_update()
-    
-    hass.services.register(DOMAIN, SERVICE_UPDATE_STATE, _update)
-
     for component in MAIKA_COMPONENTS:
         discovery.load_platform(hass, component, DOMAIN, {}, config)
 
