@@ -70,7 +70,7 @@ class AikaData(object):
         self._username = username
         self._password = password
         self._server = server
-        self.api = api.API(server)
+        self.api = api.API(self.server)
         self.api.registerUpdater(location.Location)
         self.api.registerUpdater(device_status.DeviceStatus)
         self.gps_position = None
@@ -133,8 +133,11 @@ class AikaData(object):
     async def _get_status(self):
 
         if not hasattr(self.api, 'key2018'):
+            _LOGGER.info("AIKA - logging in")
             await self.api.doLogin(self._username, self._password)
+            _LOGGER.info("AIKA - logged in")
         
+        _LOGGER.info("AIKA - doUpdate")
         await self.api.doUpdate()
         try:
 
