@@ -37,7 +37,7 @@ MAIKA_COMPONENTS = ["sensor", "device_tracker"]
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=300)
 
-def setup(hass, base_config: dict):
+async def async_setup(hass, base_config: dict):
     
     config = base_config.get(DOMAIN)
     
