@@ -122,7 +122,7 @@ class AikaData(object):
         """Fetch the latest status from AIKA."""
         _LOGGER.info("Update AIKA data.")
         self._status = await self._get_status()
-        self.gps_position = self.get_location()
+        self.gps_position = {'latitude': self.api.lat, 'longtitude': self.api.lng}
 
     
     # Retrieves info from Aika

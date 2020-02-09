@@ -25,9 +25,9 @@ class AIKADeviceTracker():
 
     def setup(self, hass):
         """Set up a timer and start gathering devices."""
-        self.update()
+        self.async_update()
         track_utc_time_change(
-            hass, lambda now: self.update(), second=range(0, 60, 30)
+            hass, lambda now: self.async_update(), second=range(0, 60, 30)
         )
 
 
@@ -37,10 +37,6 @@ class AIKADeviceTracker():
         the car is enabled.
         """
         dev_id = slugify(self._data.status['maika.model'])
-
-        if self._data._pin is None:
-            _LOGGER.debug("Tracking is disabled for vehicle %s", dev_id)
-            return
 
         _LOGGER.info("Updating %s", dev_id)
         attrs = {"id": self._data.status['maika.id']}
