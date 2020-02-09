@@ -15,7 +15,7 @@ def setup_scanner(hass, config, see, discovery_info=None):
     tracker.setup(hass)
     return True
 
-class AIKADeviceTracker:
+class AIKADeviceTracker():
     """AIKA Connected Drive device tracker."""
 
     def __init__(self, see, data):
@@ -31,7 +31,7 @@ class AIKADeviceTracker:
         )
 
 
-    def update(self) -> None:
+    async def async_update(self) -> None:
         """Update the device info.
         Only update the state in home assistant if tracking in
         the car is enabled.

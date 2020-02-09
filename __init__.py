@@ -45,6 +45,7 @@ async def async_setup(hass, base_config: dict):
     password = config.get(CONF_PASSWORD)
     server = config.get(CONF_ADDRESS)
     hass.data[DOMAIN] = AikaData(username, password, server)
+    await hass.data[DOMAIN].async_update()
     _LOGGER.info("AIKA initialization...")
     
     for component in MAIKA_COMPONENTS:
