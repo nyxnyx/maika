@@ -72,9 +72,9 @@ class AikaData(object):
         self.gps_position = None
         self._status = None
         self.SENSOR_TYPES = {
-            'maika.battery'      : ['Battery', 'level', 'mdi:battery'],
-            'maika.batteryStatus': ['Battery Status', 'level', 'mdi:battery'],
-            'maika.course'       : ['Course', 'Nort', 'mdi:compass'],
+            'maika.battery'      : ['Battery', None, 'mdi:battery'],
+            'maika.batteryStatus': ['Battery Status', None, 'mdi:battery'],
+            'maika.course'       : ['Course', None, 'mdi:compass'],
             'maika.dataContext'  : ['Data Context', None, 'mdi:message-text'],
             'maika.deviceID'     : ['Device ID', None, None],
             'maika.deviceName'   : ['Device Name', None, 'mdi:rename-box'],
