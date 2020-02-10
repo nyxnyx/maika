@@ -3,9 +3,10 @@ import logging
 _LOGGER = logging.getLogger(__name__)
 from homeassistant.util import slugify
 from homeassistant.components.device_tracker import SOURCE_TYPE_GPS
+from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.event import track_utc_time_change
 
-from . import DOMAIN
+from . import DOMAIN, SIGNAL_STATE_UPDATED
 
 
 def setup_scanner(hass, config, async_see, discovery_info=None):
@@ -14,6 +15,7 @@ def setup_scanner(hass, config, async_see, discovery_info=None):
     tracker = AIKADeviceTracker(async_see, data)
     _LOGGER.info("AIKA device_tracker set-up")
     tracker.setup(hass)
+    async_dispatcher_connect(hass, tracker.async_update)
     _LOGGER.info("AIKA device_tracker setup done.")
     return True
 
