@@ -39,7 +39,7 @@ class AIKADeviceTracker():
         await self._data.async_update()
         dev_id = slugify(self._data.status['maika.model'])
 
-        _LOGGER.info("Updating %s", dev_id)
+        _LOGGER.info("Updating device_tracker: %s", dev_id)
         attrs = {"id": self._data.status['maika.id']}
         self._see(
             dev_id=dev_id,

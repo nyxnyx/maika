@@ -105,7 +105,7 @@ class AikaSensor(Entity):
 
     def update(self):
         """Get the latest status and use it to update our sensor state."""
-        _LOGGER.info("Update state")
+        _LOGGER.info("Update state %s" % self._name)
         if self._data._status is None:
             self._state = None
             return
