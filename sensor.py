@@ -30,6 +30,7 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
 
         if sensor_type in data._status:
             entities.append(AikaSensor(data, sensor_type, hass))
+            _LOGGER.info("Added sensor_type %s" % sensor_type)
         else:
             _LOGGER.warning(
                 "Sensor type: %s does not appear in AIKA status "
