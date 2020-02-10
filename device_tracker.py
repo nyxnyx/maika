@@ -8,24 +8,24 @@ from homeassistant.helpers.event import track_utc_time_change
 from . import DOMAIN
 
 
-async def async_setup_scanner(hass, config, async_see, discovery_info=None):
+def setup_scanner(hass, config, async_see, discovery_info=None):
 
     data = hass.data[DOMAIN]
     tracker = AIKADeviceTracker(async_see, data)
     _LOGGER.info("AIKA device_tracker set-up")
-    await tracker.async_setup(hass)
+    tracker.setup(hass)
     _LOGGER.info("AIKA device_tracker setup done.")
     return True
 
 class AIKADeviceTracker():
     """AIKA Connected Drive device tracker."""
 
-    def __init__(self, async_see, data):
+    def __init__(self, see, data):
         """Initialize the Tracker."""
-        self._see = async_see
+        self._see = see
         self._data = data
 
-    async def async_setup(self, hass):
+    def setup(self, hass):
         """Set up a timer and start gathering devices."""
         
         track_utc_time_change(
@@ -42,7 +42,7 @@ class AIKADeviceTracker():
 
         _LOGGER.info("Updating device_tracker: %s", dev_id)
         attrs = {"id": self._data.status['maika.id']}
-        await self._see(
+        self._see(
             dev_id=dev_id,
             host_name=self._data.status['maika.model'],
             source_type=SOURCE_TYPE_GPS,
