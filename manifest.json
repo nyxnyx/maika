@@ -3,6 +3,6 @@
     "name": "Integrates some GPS OBD2 trackers compatible with AIKA mobile app",
     "documentation": "",
     "requirements": ["obdtracker==0.2.0"],
-    "dependencies": ["httpx"],
+    "dependencies": [],
     "codeowners": ["nyxnyx"]
   }
