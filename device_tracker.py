@@ -38,7 +38,7 @@ class AIKADeviceTracker():
         the car is enabled.
         """
         await self._data.async_update()
-        dev_id = slugify(self._data.status['maika.model'])
+        dev_id = slugify(self._data.status['maika.id'])
 
         _LOGGER.info("Updating device_tracker: %s", dev_id)
         attrs = {"id": self._data.status['maika.id']}
