@@ -13,6 +13,7 @@ def setup_scanner(hass, config, see, discovery_info=None):
     tracker = AIKADeviceTracker(see, data)
     _LOGGER.info("AIKA device_tracker set-up")
     tracker.setup(hass)
+    _LOGGER.info("AIKA device_tracker setup done.")
     return True
 
 class AIKADeviceTracker():
@@ -25,7 +26,7 @@ class AIKADeviceTracker():
 
     def setup(self, hass):
         """Set up a timer and start gathering devices."""
-        self.async_update()
+        
         track_utc_time_change(
             hass, lambda now: self.async_update(), second=range(0, 60, 30)
         )
