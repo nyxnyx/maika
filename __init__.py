@@ -97,7 +97,7 @@ class AikaData(object):
             'maika.sendcommand'  : ['Send Command', None, 'mdi:message-text'],
             'maika.speed'        : ['Speed', None, 'mdi:speedometer'],
             'maika.sn'           : ['SN', None, 'mdi:message-text'],
-            'maika.serialnumber' : ['Serial Number', None, 'mdi:message-text'],
+            #'maika.serialnumber' : ['Serial Number', None, 'mdi:message-text'],
             'maika.sendcommand'  : ['Send Command', None, 'mdi:message-text'],
             'maika.state'        : ['State', None, 'mdi:message-text'],
             'maika.status'       : ['Status', None, 'mdi:message-text'],
@@ -158,7 +158,7 @@ class AikaData(object):
             v['maika.olat']          = self.api.__getattribute__('olat')
             v['maika.olng']          = self.api.__getattribute__('olng')
             v['maika.positiontime']  = self.api.__getattribute__('positionTime')
-            v['maika.serialnumber']  = self.api.__getattribute__('serialNumber')
+            #v['maika.serialnumber']  = self.api.__getattribute__('serialNumber')
             v['maika.sendcommand']   = self.api.__getattribute__('sendCommand')
             v['maika.speed']         = self.api.__getattribute__('speed')
             v['maika.sn']            = self.api.__getattribute__('sn')
