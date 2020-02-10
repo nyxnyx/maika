@@ -56,7 +56,7 @@ class AikaSensor(Entity):
 
     def setup(self):
         """Schedule update of state by HA"""
-         track_utc_time_change(
+        track_utc_time_change(
             self._hass, lambda now: self.schedule_update_ha_state(True), second=range(0, 60, 45)
         )
         _LOGGER.info("Scheduled updates of sensor %s" % self.type)
