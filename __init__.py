@@ -65,7 +65,7 @@ class AikaData(object):
         """Initialize the data object."""
         self._username = username
         self._password = password
-        self._server = str(server).replace("http", "").replace("s:", "").replace(":", "").replace("/", "")
+        self._server = server
         self.api = api.API(self._server)
         self.api.registerUpdater(location.Location(self.api))
         self.api.registerUpdater(device_status.DeviceStatus(self.api))
