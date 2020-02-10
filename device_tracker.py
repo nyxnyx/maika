@@ -36,6 +36,7 @@ class AIKADeviceTracker():
         Only update the state in home assistant if tracking in
         the car is enabled.
         """
+        await self._data.async_update()
         dev_id = slugify(self._data.status['maika.model'])
 
         _LOGGER.info("Updating %s", dev_id)
