@@ -35,7 +35,6 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
                 "Sensor type: %s does not appear in AIKA status "
                 "output, cannot add", sensor_type)
 
-    data.update(no_throttle=True)
     add_entities(entities, True)
 
 
