@@ -27,7 +27,7 @@ async def async_setup_platform(hass, config, add_entities, discovery_info=None):
 
     for resource in data.SENSOR_TYPES:
         sensor_type = resource.lower()
-
+        _LOGGER.info("Trying to add: %s" % sensor_type)
         if sensor_type in data._status:
             entities.append(AikaSensor(data, sensor_type, hass))
             _LOGGER.info("Added sensor_type %s" % sensor_type)
