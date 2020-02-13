@@ -8,7 +8,7 @@ from obdtracker import api, location, device_status
 from homeassistant.util import Throttle
 from homeassistant.util.dt import utcnow
 from homeassistant.helpers.event import async_track_point_in_utc_time
-from homeassistant.helpers.condition import HomeAssistantError
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 
 from homeassistant.const import (
@@ -133,7 +133,7 @@ class AikaData(object):
                 await self.api.doLogin(self._username, self._password)
             except:
                 _LOGGER.error("Invalid username or password for MAIKA component")
-                
+                raise HomeAssistantError("Login error - check config for MAIKA component")
             _LOGGER.info("AIKA - logged in")
         
         _LOGGER.info("AIKA - doUpdate")
@@ -183,7 +183,7 @@ class AikaData(object):
 
             return v
         except (ConnectionResetError) as err:
-            _LOGGER.debug(
+            _LOGGER.error(
                 "Error getting AIKA info: %s", err)
             return None
 

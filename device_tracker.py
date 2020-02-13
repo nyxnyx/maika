@@ -5,7 +5,6 @@ from homeassistant.components.device_tracker import SOURCE_TYPE_GPS
 from homeassistant.util import slugify
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
-from datetime import timedelta
 from homeassistant.helpers.typing import HomeAssistantType
 from . import DOMAIN, SIGNAL_STATE_UPDATED
 
@@ -60,7 +59,7 @@ class AIKADeviceTracker(TrackerEntity):
         )
 
     def get_heading(self, course: int):
-        if course > 349 and course < 10: return "N"
+        if course > 349 or course < 10: return "N"
         if course > 9 and course < 80: return "NE"
         if course > 79 and course < 100: return "E"
         if course > 99 and course < 170: return "SE"
@@ -68,6 +67,7 @@ class AIKADeviceTracker(TrackerEntity):
         if course > 189 and course < 260: return "SW"
         if course > 259 and course < 280: return "W"
         if course > 279 and course < 350: return "NW"
+    
     @property
     def dev_id(self):
         return "maika_{}".format(slugify(self.status["maika.iccid"]))
