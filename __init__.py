@@ -1,15 +1,14 @@
 import logging
 import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
-import asyncio
-from datetime import datetime
+
 from datetime import timedelta
 from homeassistant.helpers import discovery
 from obdtracker import api, location, device_status
 from homeassistant.util import Throttle
 from homeassistant.util.dt import utcnow
 from homeassistant.helpers.event import async_track_point_in_utc_time
-
+from homeassistant.helpers.condition import HomeAssistantError
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 
 from homeassistant.const import (
@@ -34,8 +33,6 @@ CONFIG_SCHEMA = vol.Schema(
     extra=vol.ALLOW_EXTRA,
 )
 
-SERVICE_UPDATE_STATE = f"{DOMAIN}_updated"
-
 # Those components will be dicovered automatically based on ocnfiguration
 MAIKA_COMPONENTS = ["sensor", "device_tracker"]
 
@@ -48,7 +45,7 @@ async def async_setup(hass, base_config: dict):
     username = config.get(CONF_USERNAME)
     password = config.get(CONF_PASSWORD)
     server = config.get(CONF_ADDRESS)
-    interval = timedelta(seconds=300)
+    interval = MIN_TIME_BETWEEN_UPDATES
 
     hass.data[DOMAIN] = AikaData(username, password, server)
     async def _update(now):
@@ -79,7 +76,6 @@ class AikaData(object):
         self.api = api.API(self._server)
         self.api.registerUpdater(location.Location(self.api))
         self.api.registerUpdater(device_status.DeviceStatus(self.api))
-        self.gps_position = None
         self._status = None
         self.SENSOR_TYPES = {
             'maika.battery'      : ['Battery', None, 'mdi:battery'],
@@ -123,7 +119,7 @@ class AikaData(object):
             'maika.xg'           : ['Xg', None, 'mdi:message-text'],
             'maika.yinshen'      : ['yinshen', None, 'mdi:message-text'],
         }
-
+    @Throttle(MIN_TIME_BETWEEN_UPDATES)
     async def async_update(self, **kwargs):
         """Fetch the latest status from AIKA."""
         _LOGGER.info("Update AIKA data.")
@@ -133,9 +129,12 @@ class AikaData(object):
     async def _get_status(self):
 
         if not hasattr(self.api, 'key2018'):
-            _LOGGER.info("AIKA - logging in")
-            await self.api.doLogin(self._username, self._password)
-            _LOGGER.info("AIKA - logged in %s" % self.api.key)
+            try:
+                await self.api.doLogin(self._username, self._password)
+            except:
+                _LOGGER.error("Invalid username or password for MAIKA component")
+                
+            _LOGGER.info("AIKA - logged in")
         
         _LOGGER.info("AIKA - doUpdate")
         await self.api.doUpdate()
