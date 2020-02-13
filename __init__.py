@@ -7,7 +7,10 @@ from datetime import timedelta
 from homeassistant.helpers import discovery
 from obdtracker import api, location, device_status
 from homeassistant.util import Throttle
+from homeassistant.util.dt import utcnow
+from homeassistant.helpers.event import async_track_point_in_utc_time
 
+from homeassistant.helpers.dispatcher import async_dispatcher_send
 
 from homeassistant.const import (
     CONF_USERNAME, CONF_PASSWORD, CONF_ADDRESS,
@@ -31,7 +34,7 @@ CONFIG_SCHEMA = vol.Schema(
     extra=vol.ALLOW_EXTRA,
 )
 
-SERVICE_UPDATE_STATE = "update_state"
+SERVICE_UPDATE_STATE = f"{DOMAIN}_updated"
 
 # Those components will be dicovered automatically based on ocnfiguration
 MAIKA_COMPONENTS = ["sensor", "device_tracker"]
@@ -45,15 +48,21 @@ async def async_setup(hass, base_config: dict):
     username = config.get(CONF_USERNAME)
     password = config.get(CONF_PASSWORD)
     server = config.get(CONF_ADDRESS)
+    interval = timedelta(seconds=300)
+
     hass.data[DOMAIN] = AikaData(username, password, server)
-    await hass.data[DOMAIN].async_update()
-    _LOGGER.info("AIKA initialization...")
+    async def _update(now):
+        try:
+            await hass.data[DOMAIN].async_update()
+            async_dispatcher_send(hass, SIGNAL_STATE_UPDATED)
+        finally:
+            async_track_point_in_utc_time(hass, _update, utcnow() + interval)
+        return True
     
     for component in MAIKA_COMPONENTS:
         discovery.load_platform(hass, component, DOMAIN, {}, config)
 
-    _LOGGER.info("Done initialization")
-    return True
+    return await _update(utcnow())
 
 
 class AikaData(object):
@@ -115,15 +124,11 @@ class AikaData(object):
             'maika.yinshen'      : ['yinshen', None, 'mdi:message-text'],
         }
 
-    @Throttle(MIN_TIME_BETWEEN_UPDATES)
     async def async_update(self, **kwargs):
-
         """Fetch the latest status from AIKA."""
         _LOGGER.info("Update AIKA data.")
-        self._status = await self._get_status()
-        self.gps_position = [self.api.lat, self.api.lng]
+        self._status = await self._get_status() 
 
-    
     # Retrieves info from Aika
     async def _get_status(self):
 
