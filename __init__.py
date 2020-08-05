@@ -38,7 +38,7 @@ MAIKA_COMPONENTS = ["sensor", "device_tracker"]
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=300)
 
-async def async_setup(hass, base_config: dict):
+async def async_setup(hass, base_config: dict) -> bool:
     
     config = base_config.get(DOMAIN)
     
@@ -47,7 +47,7 @@ async def async_setup(hass, base_config: dict):
     server = config.get(CONF_ADDRESS)
     interval = MIN_TIME_BETWEEN_UPDATES
 
-    hass.data[DOMAIN] = AikaData(username, password, server)
+    hass.data[DOMAIN] = AikaData(username, password, server, hass)
     async def _update(now):
         try:
             await hass.data[DOMAIN].async_update()
@@ -55,11 +55,12 @@ async def async_setup(hass, base_config: dict):
         finally:
             async_track_point_in_utc_time(hass, _update, utcnow() + interval)
         return True
-    
+    #
     for component in MAIKA_COMPONENTS:
-        discovery.load_platform(hass, component, DOMAIN, {}, config)
+        await discovery.async_load_platform(hass, component, DOMAIN, {}, config)
 
     return await _update(utcnow())
+    #return True
 
 
 class AikaData(object):
@@ -68,14 +69,20 @@ class AikaData(object):
     updates from the server.
     """
 
-    def __init__(self, username, password, server):
+    async def async_configure(self) -> None:
+        self.api = await self._hass.async_add_executor_job(api.API(self._server))
+        self.api.registerUpdater(location.Location(self.api))
+        self.api.registerUpdater(device_status.DeviceStatus(self.api))
+
+    def __init__(self, username, password, server, hass):
         """Initialize the data object."""
         self._username = username
         self._password = password
         self._server = server
-        self.api = api.API(self._server)
-        self.api.registerUpdater(location.Location(self.api))
-        self.api.registerUpdater(device_status.DeviceStatus(self.api))
+        self._hass = hass
+        self.api = None
+
+
         self._status = None
         self.SENSOR_TYPES = {
             'maika.battery'      : ['Battery', None, 'mdi:battery'],
@@ -126,10 +133,12 @@ class AikaData(object):
         self._status = await self._get_status() 
 
     # Retrieves info from Aika
-    async def _get_status(self):
+    async def _get_status(self) -> {}:
 
         if not hasattr(self.api, 'key2018'):
             try:
+                if self.api == None:
+                    await self.async_configure()
                 await self.api.doLogin(self._username, self._password)
             except:
                 _LOGGER.error("Invalid username or password for MAIKA component")
@@ -188,7 +197,7 @@ class AikaData(object):
             return None
 
     @property
-    def status(self):
+    def status(self) -> {}:
         """Get latest update if throttle allows. Return status."""
         return self._status
 
