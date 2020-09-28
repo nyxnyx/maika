@@ -70,7 +70,7 @@ class AikaData(object):
     """
 
     async def async_configure(self) -> None:
-        self.api = await self._hass.async_add_executor_job(api.API(self._server))
+        self.api = api.API(self._server)
         self.api.registerUpdater(location.Location(self.api))
         self.api.registerUpdater(device_status.DeviceStatus(self.api))
 
