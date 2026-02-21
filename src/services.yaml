@@ -1,0 +1,11 @@
+update_state:
+  description: >
+    Fetch the last state of onstar enabled Opel car.
+
+send_command:
+  description: >
+    Send SMS-style command via AIKA cloud API.
+  fields:
+    command:
+      description: The command string (e.g. DY to cut oil/electricity).
+      example: "DY"
