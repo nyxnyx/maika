@@ -46,3 +46,30 @@ async def test_aika_sensor():
     await sensor.async_update()
     
     assert sensor.state == 80
+
+@pytest.mark.asyncio
+async def test_aika_sensor_display_state():
+    mock_data = MagicMock()
+    mock_data.status = {"maika.battery": 80}
+    mock_data._status = {"maika.battery": 80}
+    mock_data.SENSOR_TYPES = {"maika.battery": ["Battery", "%", "mdi:battery"]}
+    
+    sensor = AikaSensor(mock_data, "maika.battery", MagicMock())
+    
+    assert sensor.display_state() == "ON"
+    mock_data._status = None
+    assert sensor.display_state() == "OFF"
+
+@pytest.mark.asyncio
+async def test_aika_sensor_attributes():
+    mock_data = MagicMock()
+    mock_data.status = {"maika.battery": 80}
+    mock_data._status = {"maika.battery": 80}
+    mock_data.SENSOR_TYPES = {"maika.battery": ["Battery", "%", "mdi:battery"]}
+    
+    sensor = AikaSensor(mock_data, "maika.battery", MagicMock())
+    attr = sensor.extra_state_attributes
+    
+    assert 'state' in attr
+    assert attr['state'] == "ON"
+    assert sensor.force_update() is True

@@ -9,8 +9,8 @@ from homeassistant.helpers.typing import HomeAssistantType
 from . import DOMAIN, SIGNAL_STATE_UPDATED
 
 
-async def async_setup_scanner(hass, config, async_see, discovery_info=None):
-
+async def async_setup_scanner(hass: HomeAssistantType, config: dict, async_see, discovery_info=None) -> bool:
+    """Set up the AIKA scanner."""
     data = hass.data[DOMAIN]
     tracker = AIKADeviceTracker(hass, data, async_see)
     await tracker.async_update()
@@ -58,7 +58,8 @@ class AIKADeviceTracker(TrackerEntity):
             icon="mdi:car"
         )
 
-    def get_heading(self, course: int):
+    def get_heading(self, course: int) -> str:
+        """Convert course heading in degrees to a compass direction representation."""
         if course > 349 or course < 10: return "N"
         if course > 9 and course < 80: return "NE"
         if course > 79 and course < 100: return "E"
@@ -90,5 +91,6 @@ class AIKADeviceTracker(TrackerEntity):
         """Return longitude value of the device."""
         return self._longitude
 
-    def force_update(self):
+    def force_update(self) -> bool:
+        """Force update."""
         return True

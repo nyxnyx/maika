@@ -39,6 +39,7 @@ MAIKA_COMPONENTS = ["sensor", "device_tracker"]
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=300)
 
 async def async_setup(hass, base_config: dict) -> bool:
+    """Setup the AIKA component."""
     
     config = base_config.get(DOMAIN)
     
@@ -59,7 +60,8 @@ async def async_setup(hass, base_config: dict) -> bool:
     for component in MAIKA_COMPONENTS:
         await discovery.async_load_platform(hass, component, DOMAIN, {}, config)
 
-    async def handle_send_command(call):
+    async def handle_send_command(call) -> None:
+        """Handle the maika.send_command service."""
         command = call.data.get("command")
         if command:
             api_instance = hass.data[DOMAIN].api
@@ -150,7 +152,8 @@ class AikaData(object):
         self._status = await self._get_status() 
 
     # Retrieves info from Aika
-    async def _get_status(self) -> {}:
+    async def _get_status(self) -> dict | None:
+        """Retrieve status from AIKA API."""
 
         if not hasattr(self.api, 'key2018'):
             try:
@@ -217,7 +220,7 @@ class AikaData(object):
             return None
 
     @property
-    def status(self) -> {}:
+    def status(self) -> dict | None:
         """Get latest update if throttle allows. Return status."""
         return self._status
 

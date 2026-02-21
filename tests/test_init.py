@@ -66,3 +66,27 @@ async def test_aika_data_get_status_success():
     assert status is not None
     assert status['maika.battery'] == 100
     assert status['maika.lat'] == "50.0"
+
+@pytest.mark.asyncio
+async def test_handle_send_command_success(mock_hass):
+    with patch("maika.discovery.async_load_platform", new_callable=AsyncMock), \
+         patch("maika.AikaData.async_update", new_callable=AsyncMock), \
+         patch("maika.async_track_point_in_utc_time"), \
+         patch("maika.async_dispatcher_send"), \
+         patch("maika.utcnow"):
+         
+        config = {DOMAIN: {CONF_USERNAME: "u", CONF_PASSWORD: "p", CONF_ADDRESS: "a"}}
+        await async_setup(mock_hass, config)
+        
+        mock_api = MagicMock()
+        mock_api.send_command = AsyncMock()
+        mock_hass.data[DOMAIN].api = mock_api
+        
+        # Call the registered service
+        handle_send_command = mock_hass.services.async_register.call_args[0][2]
+        call = MagicMock()
+        call.data = {"command": "DY"}
+        
+        await handle_send_command(call)
+        
+        mock_api.send_command.assert_called_once_with("DY")

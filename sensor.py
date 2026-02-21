@@ -14,8 +14,8 @@ from homeassistant.helpers.dispatcher import async_dispatcher_connect
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_platform(hass, config, add_entities, discovery_info=None):
-
+async def async_setup_platform(hass, config, add_entities, discovery_info=None) -> None:
+    """Set up the AIKA sensor platform."""
     data = hass.data[DOMAIN]
 
     if data._status is None:
@@ -51,7 +51,7 @@ class AikaSensor(Entity):
         self._state = None
         self.hass = hass
 
-    async def async_added_to_hass(self):
+    async def async_added_to_hass(self) -> None:
         """Register update dispatcher."""
         async_dispatcher_connect(
             self.hass, SIGNAL_STATE_UPDATED, self.async_schedule_update_ha_state
@@ -68,8 +68,8 @@ class AikaSensor(Entity):
         return self._unit
 
     @property
-    def device_state_attributes(self):
-        """Return the sensor attributes."""
+    def extra_state_attributes(self) -> dict:
+        """Return the state attributes."""
         attr = dict()
         attr[ATTR_STATE] = self.display_state()
         return attr
@@ -86,7 +86,7 @@ class AikaSensor(Entity):
     def state(self):
         return self._state
 
-    def display_state(self):
+    def display_state(self) -> str:
         """Return display state."""
         if self._data._status is None:
             return 'OFF'

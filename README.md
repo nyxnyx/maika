@@ -1,6 +1,6 @@
 # What it is for?
 This is custom_component for AIKA / other GPS OBD2 Tracker for cars. 
-Just search Alliexpres / Whish / Gearbest / ... for GPS OBD2 Tracker. This is for all GPS OBD2 trackers
+Just search Aliexpress / Wish / Gearbest / ... for GPS OBD2 Tracker. This is for all GPS OBD2 trackers
 that are using AIKA mobile app. If you have trouble - let me know.
 
 # How to install it?
@@ -20,8 +20,8 @@ maika:
 ```
 where:
 1. username: your device serial number
-1. password: your aika / clound password (default 123456)
-1. address: clound service addres (http://www.aika168.com)
+1. password: your aika / cloud password (default 123456)
+1. address: cloud service address (http://www.aika168.com)
 
 # Sensors
 Following sensors are available:

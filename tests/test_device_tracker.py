@@ -62,3 +62,19 @@ async def test_aika_device_tracker_update():
     assert kwargs['mac'] == "iccid_123"
     assert kwargs['gps'] == (51.0, 21.0)
     assert kwargs['attributes']['heading'] == "S"
+
+@pytest.mark.asyncio
+async def test_aika_device_tracker_get_heading():
+    mock_data = MagicMock()
+    mock_see = AsyncMock()
+    tracker = AIKADeviceTracker(MagicMock(), mock_data, mock_see)
+
+    assert tracker.get_heading(0) == "N"
+    assert tracker.get_heading(45) == "NE"
+    assert tracker.get_heading(90) == "E"
+    assert tracker.get_heading(135) == "SE"
+    assert tracker.get_heading(180) == "S"
+    assert tracker.get_heading(225) == "SW"
+    assert tracker.get_heading(270) == "W"
+    assert tracker.get_heading(315) == "NW"
+    assert tracker.force_update() is True
