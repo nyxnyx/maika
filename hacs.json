@@ -1,0 +1,9 @@
+{
+    "name": "Maika",
+    "domain": "maika",
+    "documentation": "https://github.com/nyxnyx/maika",
+    "issue_tracker": "https://github.com/nyxnyx/maika/issues",
+    "category": "Integration",
+    "version": "1.0.0",
+    "homeassistant": "2023.9.0"
+}
