@@ -4,10 +4,19 @@ Just search Aliexpress / Wish / Gearbest / ... for GPS OBD2 Tracker. This is for
 that are using AIKA mobile app. If you have trouble - let me know.
 
 # How to install it?
-Place in our custom_components folder:
+## Manual installation
+Place in your `custom_components` folder:
+```bash
+git clone https://github.com/nyxnyx/maika.git
 ```
-git clone git@github.com:nyxnyx/maika.git
-```
+
+## Installation via HACS
+1. Ensure you have [HACS](https://hacs.xyz) installed.
+2. In Home Assistant, go to **HACS → Integrations → Explore & Add Repositories**.
+3. Search for **Maika** or add the repository URL `https://github.com/nyxnyx/maika`.
+4. Click **Install** and follow the prompts.
+
+# Configuration
 
 # Configuration
 ```configuration.yaml```
