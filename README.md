@@ -53,4 +53,15 @@ cards:
     - sensor.maika_work
     - sensor.maika_xg
     - sensor.maika_yinshen
+    - sensor.maika_ignition
+    - sensor.maika_warning_type
+```
+
+# Services / Actions
+You can trigger commands directly to your GPS Tracker from Home Assistant automations:
+
+```yaml
+service: maika.send_command
+data:
+  command: "DY" # Example: Cut oil/electricity command
 ```
