@@ -3,10 +3,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
+tests/__pycache__/
 
 # C extensions
 *.so
-
+*.pyc
 # Distribution / packaging
 *.egg-info/
 *.egg
@@ -19,7 +20,7 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Virtual environment
-venv/
+.venv/
 .env/
 .env*/
 
