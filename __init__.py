@@ -59,8 +59,23 @@ async def async_setup(hass, base_config: dict) -> bool:
     for component in MAIKA_COMPONENTS:
         await discovery.async_load_platform(hass, component, DOMAIN, {}, config)
 
+    async def handle_send_command(call):
+        command = call.data.get("command")
+        if command:
+            api_instance = hass.data[DOMAIN].api
+            if api_instance:
+                try:
+                    await api_instance.send_command(command)
+                    _LOGGER.info("Command '%s' sent successfully.", command)
+                except Exception as e:
+                    _LOGGER.error("Failed to send command '%s': %s", command, e)
+            else:
+                 _LOGGER.error("API not ready to send command")
+
+    hass.services.async_register(DOMAIN, "send_command", handle_send_command)
+
     return await _update(utcnow())
-    #return True
+    #return Trueasync_update
 
 
 class AikaData(object):
@@ -125,6 +140,8 @@ class AikaData(object):
             'maika.work'         : ['Work', None, 'mdi:message-text'],
             'maika.xg'           : ['Xg', None, 'mdi:message-text'],
             'maika.yinshen'      : ['yinshen', None, 'mdi:message-text'],
+            'maika.ignition'     : ['Ignition (ACC)', None, 'mdi:key'],
+            'maika.warning_type' : ['Warning Type', None, 'mdi:alert'],
         }
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     async def async_update(self, **kwargs):
@@ -151,44 +168,47 @@ class AikaData(object):
         try:
 
             v={}
-            v['maika.battery']       = self.api.__getattribute__('battery')
-            v['maika.batterystatus'] = self.api.__getattribute__('batteryStatus')
-            v['maika.course']        = self.api.__getattribute__('course')
-            v['maika.datacontext']   = self.api.__getattribute__('dataContext')
-            v['maika.deviceid']      = self.api.__getattribute__('deviceID')
-            v['maika.devicename']    = self.api.__getattribute__('deviceName')
-            v['maika.iccid']         = self.api.__getattribute__('ICCID')
-            v['maika.icon']          = self.api.__getattribute__('icon')
-            v['maika.id']            = self.api.__getattribute__('id')
-            v['maika.isgps']         = self.api.__getattribute__('isGPS')
-            v['maika.isstop']        = self.api.__getattribute__('isStop')
-            #v['maika.key2018']       = self.api.__getattribute__('key2018')
-            v['maika.lat']           = self.api.__getattribute__('lat')
-            v['maika.lng']           = self.api.__getattribute__('lng')
-            v['maika.model']         = self.api.__getattribute__('model')
-            #v['maika.new201710']      = self.api.__getattribute__('new201710')
-            v['maika.ofl']           = self.api.__getattribute__('ofl')
-            v['maika.olat']          = self.api.__getattribute__('olat')
-            v['maika.olng']          = self.api.__getattribute__('olng')
-            v['maika.positiontime']  = self.api.__getattribute__('positionTime')
-            #v['maika.serialnumber']  = self.api.__getattribute__('serialNumber')
-            v['maika.sendcommand']   = self.api.__getattribute__('sendCommand')
-            v['maika.speed']         = self.api.__getattribute__('speed')
-            v['maika.sn']            = self.api.__getattribute__('sn')
-            v['maika.state']         = self.api.__getattribute__('state')
-            v['maika.status']        = self.api.__getattribute__('status')
-            v['maika.statusx20']     = self.api.__getattribute__('statusX20')
-            v['maika.stm']           = self.api.__getattribute__('stm')
-            v['maika.timezone']      = self.api.__getattribute__('timeZone')
-            v['maika.vin']           = self.api.__getattribute__('VIN')
-            v['maika.voice']         = self.api.__getattribute__('voice')
-            v['maika.warn']          = self.api.__getattribute__('warn')
-            v['maika.warnstr']       = self.api.__getattribute__('warnStr')
-            v['maika.warntime']      = self.api.__getattribute__('warnTime')
-            v['maika.warntxt']       = self.api.__getattribute__('warnTxt')
-            v['maika.work']          = self.api.__getattribute__('work')
-            v['maika.xg']            = self.api.__getattribute__('xg')
-            v['maika.yinshen']       = self.api.__getattribute__('yinshen')
+            info = self.api.device_info
+            loc = self.api.location
+            status = self.api.status
+            
+            v['maika.battery']       = status.battery if status else None
+            v['maika.batterystatus'] = status.battery_status if status else None
+            v['maika.course']        = loc.course if loc else None
+            v['maika.datacontext']   = None # Not available in current models
+            v['maika.deviceid']      = info.device_id if info else None
+            v['maika.devicename']    = info.device_name if info else None
+            v['maika.iccid']         = info.imei if info else None
+            v['maika.icon']          = None
+            v['maika.id']            = info.device_id if info else None
+            v['maika.isgps']         = loc.is_gps if loc else None
+            v['maika.isstop']        = loc.is_stop if loc else None
+            v['maika.lat']           = loc.lat if loc else None
+            v['maika.lng']           = loc.lng if loc else None
+            v['maika.model']         = info.model if info else None
+            v['maika.ofl']           = None
+            v['maika.olat']          = None
+            v['maika.olng']          = None
+            v['maika.positiontime']  = loc.position_time if loc else None
+            v['maika.sendcommand']   = None
+            v['maika.speed']         = loc.speed if loc else None
+            v['maika.sn']            = info.sn if info else None
+            v['maika.state']         = status.state if status else None
+            v['maika.status']        = status.status if status else None
+            v['maika.statusx20']     = None
+            v['maika.stm']           = None
+            v['maika.timezone']      = None
+            v['maika.vin']           = None
+            v['maika.voice']         = None
+            v['maika.warn']          = None
+            v['maika.warnstr']       = None
+            v['maika.warntime']      = None
+            v['maika.warntxt']       = status.warn_txt if status else None
+            v['maika.work']          = None
+            v['maika.xg']            = status.signal_strength if status else None
+            v['maika.yinshen']       = None
+            v['maika.ignition']      = status.is_ignition_on if status else False
+            v['maika.warning_type']  = status.warning_type.value if status and hasattr(status, 'warning_type') else "None"
 
             return v
         except (ConnectionResetError) as err:
